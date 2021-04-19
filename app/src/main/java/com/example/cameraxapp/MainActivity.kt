@@ -1,6 +1,5 @@
 package com.example.cameraxapp
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -22,9 +21,8 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        iv_picture.setOnClickListener {
-            permissionCheck.hasPermissions(arrayListOf(Manifest.permission.CAMERA))
-        }
+        supportFragmentManager.beginTransaction().replace(R.id.fragment, PictureFragment()).commit()
+
 
     }
 
