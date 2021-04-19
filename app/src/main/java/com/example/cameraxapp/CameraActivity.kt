@@ -47,6 +47,9 @@ class CameraActivity: AppCompatActivity() {
 
         // 사진클릭 버튼 리스너
         camera_capture_button.setOnClickListener{ takePhoto() }
+        photo_view_button.setOnClickListener {
+            // TODO: MainActivity -> AlbumFragment 이동
+        }
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
