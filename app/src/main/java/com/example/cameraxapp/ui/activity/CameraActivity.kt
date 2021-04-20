@@ -1,6 +1,7 @@
 package com.example.cameraxapp.ui.activity
 
 import android.Manifest
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,8 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.example.cameraxapp.R
+import com.example.cameraxapp.util.Constants.Companion.ALBUM_OK
+import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.PermissionCheck
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
@@ -29,7 +32,6 @@ class CameraActivity: AppCompatActivity() {
     private lateinit var permissionCheck: PermissionCheck
 
     companion object {
-        private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 
@@ -50,6 +52,10 @@ class CameraActivity: AppCompatActivity() {
         camera_capture_button.setOnClickListener{ takePhoto() }
         photo_view_button.setOnClickListener {
             // TODO: MainActivity -> AlbumFragment 이동
+            Log.e(TAG, "앨범버튼")
+
+            setResult(ALBUM_OK)
+            finish()
         }
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -141,5 +147,10 @@ class CameraActivity: AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionCheck.onRequestPermissionResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.e(TAG, "Camera: $requestCode, $resultCode, $data", )
     }
 }

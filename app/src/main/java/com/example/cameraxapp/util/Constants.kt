@@ -5,6 +5,7 @@ import android.Manifest
 class Constants {
 
     companion object {
+        const val TAG = "CameraXBasic"
 
         // 권한
         const val PERMISSION_CODE_OK = 1004
@@ -21,7 +22,10 @@ class Constants {
             "android.permission.READ_PHONE_STATE" to "전화"
         )
 
-        val PERMISSION_CAMERA = Manifest.permission.CAMERA
+        const val PERMISSION_CAMERA = Manifest.permission.CAMERA
+
+        const val ALBUM_OK = 100
+        const val PICTURE_OK = 101
 
     }
 }

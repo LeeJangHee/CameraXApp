@@ -15,7 +15,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -26,7 +26,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -37,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="@+id/imageView2"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -48,7 +48,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -59,7 +59,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -71,7 +71,7 @@
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="@+id/imageView5"
         app:layout_constraintVertical_bias="1.0"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -83,7 +83,7 @@
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="@+id/imageView6"
         app:layout_constraintVertical_bias="1.0"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView8"
@@ -95,6 +95,6 @@
         app:layout_constraintStart_toEndOf="@+id/imageView7"
         app:layout_constraintTop_toTopOf="@+id/imageView7"
         app:layout_constraintVertical_bias="1.0"
-        tools:src="@tools:sample/avatars" />
+        android:src="@mipmap/ic_launcher" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
