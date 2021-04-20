@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CameraXApp" >
-        <activity android:name=".MainActivity"
+        <activity android:name=".ui.activity.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CameraActivity"
+        <activity android:name=".ui.activity.CameraActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 

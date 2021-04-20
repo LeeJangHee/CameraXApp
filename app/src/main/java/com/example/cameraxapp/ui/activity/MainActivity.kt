@@ -1,9 +1,11 @@
-package com.example.cameraxapp
+package com.example.cameraxapp.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.golf.vct.util.PermissionCheck
+import com.example.cameraxapp.R
+import com.example.cameraxapp.ui.fragment.PictureFragment
+import com.example.cameraxapp.util.PermissionCheck
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

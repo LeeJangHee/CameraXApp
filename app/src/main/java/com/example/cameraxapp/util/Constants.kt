@@ -1,4 +1,4 @@
-package com.golf.vct.util
+package com.example.cameraxapp.util
 
 import android.Manifest
 

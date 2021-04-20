@@ -1,4 +1,4 @@
-package com.example.cameraxapp
+package com.example.cameraxapp.ui.activity
 
 import android.Manifest
 import android.net.Uri
@@ -12,7 +12,8 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import com.golf.vct.util.PermissionCheck
+import com.example.cameraxapp.R
+import com.example.cameraxapp.util.PermissionCheck
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.text.SimpleDateFormat

@@ -1,4 +1,4 @@
-package com.example.cameraxapp
+package com.example.cameraxapp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,13 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.golf.vct.util.PermissionCheck
+import com.example.cameraxapp.R
+import com.example.cameraxapp.ui.activity.CameraActivity
+import com.example.cameraxapp.util.PermissionCheck
 import kotlinx.android.synthetic.main.fragment_picture.view.*
 
 
 class PictureFragment : Fragment() {
 
-    lateinit var permissionCheck:PermissionCheck
+    lateinit var permissionCheck: PermissionCheck
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

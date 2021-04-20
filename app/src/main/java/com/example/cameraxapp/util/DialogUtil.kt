@@ -1,4 +1,4 @@
-package com.golf.vct.view.layout
+package com.example.cameraxapp.util
 
 import android.app.Activity
 import android.app.AlertDialog

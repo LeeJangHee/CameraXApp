@@ -1,4 +1,4 @@
-package com.golf.vct.util
+package com.example.cameraxapp.util
 
 import android.app.Activity
 import android.content.pm.PackageManager
@@ -6,10 +6,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.golf.vct.util.Constants.Companion.PERMISSION_CODE_OK
-import com.golf.vct.util.Constants.Companion.PERMISSION_MAPS
-import com.golf.vct.util.Constants.Companion.PERMISSION_REQUESTS
-import com.golf.vct.view.layout.DialogUtil
+import com.example.cameraxapp.util.Constants.Companion.PERMISSION_CODE_OK
+import com.example.cameraxapp.util.Constants.Companion.PERMISSION_MAPS
 
 class PermissionCheck {
     var activity: Activity? = null
