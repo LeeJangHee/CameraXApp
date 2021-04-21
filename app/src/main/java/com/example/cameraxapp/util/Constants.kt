@@ -27,5 +27,8 @@ class Constants {
         const val ALBUM_OK = 100
         const val PICTURE_OK = 101
 
+        const val ANIMATION_FAST_MILLIS = 50L
+        const val ANIMATION_SLOW_MILLIS = 100L
+
     }
 }
