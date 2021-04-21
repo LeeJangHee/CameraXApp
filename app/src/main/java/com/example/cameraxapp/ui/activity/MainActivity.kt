@@ -1,6 +1,5 @@
 package com.example.cameraxapp.ui.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -42,9 +41,11 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e(TAG, "Activity: $requestCode, $resultCode, $data")
-        when(requestCode) {
+
+        when (resultCode) {
             ALBUM_OK -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment, AlbumFragment()).commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, AlbumFragment()).commit()
             }
         }
 
