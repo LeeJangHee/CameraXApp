@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="@+id/camera_capture_button" />
 
     <androidx.camera.view.PreviewView
-        android:id="@+id/viewFinder"
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
