@@ -67,7 +67,7 @@ class CameraActivity : AppCompatActivity() {
 
     companion object {
         private const val DATE_FORMAT = "yyyy-MM-dd"
-        private const val FILENAME_FORMAT = "UUID_index"
+        private const val FILENAME_FORMAT = "roundId_index"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
 
