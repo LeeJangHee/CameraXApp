@@ -1,6 +1,5 @@
 package com.example.cameraxapp.ui.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -39,16 +38,17 @@ class PictureFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        permissionCheck = PermissionCheck(this@PictureFragment, object : PermissionCheck.PermissionListener {
-            override fun permissionAllowed() {
+        permissionCheck =
+            PermissionCheck(this@PictureFragment, object : PermissionCheck.PermissionListener {
+                override fun permissionAllowed() {
 //                mainActivity.openCameraActivity()
-                val intent = Intent(activity, CameraActivity::class.java)
+                    val intent = Intent(activity, CameraActivity::class.java)
 
-                // requestCode 값으로 안드로이드 값을 넣으면 안된다.
-                activity?.startActivityForResult(intent, ALBUM_OK)
-            }
+                    // requestCode 값으로 안드로이드 값을 넣으면 안된다.
+                    activity?.startActivityForResult(intent, ALBUM_OK)
+                }
 
-        })
+            })
 
         view.iv_picture.setOnClickListener {
             permissionCheck.hasPermissions(arrayListOf(PERMISSION_CAMERA))
