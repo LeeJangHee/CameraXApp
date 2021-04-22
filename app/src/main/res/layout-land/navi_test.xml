@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
 
-    <include layout="@layout/activity_camera"
+    <include layout="@layout/fragment_camera"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
 

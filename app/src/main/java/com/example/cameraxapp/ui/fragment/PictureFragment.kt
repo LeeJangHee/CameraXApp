@@ -9,9 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cameraxapp.R
-import com.example.cameraxapp.ui.activity.CameraActivity
 import com.example.cameraxapp.ui.activity.MainActivity
-import com.example.cameraxapp.util.Constants.Companion.ALBUM_OK
 import com.example.cameraxapp.util.Constants.Companion.PERMISSION_CAMERA
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.PermissionCheck
@@ -42,10 +40,11 @@ class PictureFragment : Fragment() {
             PermissionCheck(this@PictureFragment, object : PermissionCheck.PermissionListener {
                 override fun permissionAllowed() {
 //                mainActivity.openCameraActivity()
-                    val intent = Intent(activity, CameraActivity::class.java)
-
-                    // requestCode 값으로 안드로이드 값을 넣으면 안된다.
-                    activity?.startActivityForResult(intent, ALBUM_OK)
+//                    val intent = Intent(activity, CameraFragment::class.java)
+//
+//                    // requestCode 값으로 안드로이드 값을 넣으면 안된다.
+//                    activity?.startActivityForResult(intent, ALBUM_OK)
+                    openFragment()
                 }
 
             })
@@ -54,6 +53,11 @@ class PictureFragment : Fragment() {
             permissionCheck.hasPermissions(arrayListOf(PERMISSION_CAMERA))
         }
 
+    }
+
+    fun openFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment, CameraFragment()).commit()
     }
 
     override fun onRequestPermissionsResult(

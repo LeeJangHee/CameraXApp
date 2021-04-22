@@ -1,4 +1,4 @@
-package com.example.cameraxapp.ui.activity
+package com.example.cameraxapp.ui.fragment
 
 import android.Manifest
 import android.content.Context
@@ -12,22 +12,25 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
+import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.cameraxapp.R
-import com.example.cameraxapp.util.Constants.Companion.ALBUM_OK
+import com.example.cameraxapp.databinding.FragmentCameraBinding
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_FAST_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_SLOW_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.PermissionCheck
-import kotlinx.android.synthetic.main.activity_camera.*
+import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,12 +40,14 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class CameraActivity : AppCompatActivity() {
+class CameraFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
     private var displayId: Int = -1
+    private var _binding: FragmentCameraBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
@@ -51,14 +56,14 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var viewFinder: PreviewView
 
     private val displayManager by lazy {
-        this.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+        requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     }
 
     private val displayListener = object : DisplayManager.DisplayListener {
         override fun onDisplayAdded(displayId: Int) = Unit
         override fun onDisplayRemoved(displayId: Int) = Unit
-        override fun onDisplayChanged(displayId: Int) = viewFinder?.let { view ->
-            if (displayId == this@CameraActivity.displayId) {
+        override fun onDisplayChanged(displayId: Int) = view?.let { view ->
+            if (displayId == this@CameraFragment.displayId) {
                 Log.d(TAG, "Rotation changed: ${view.display.rotation}")
                 imageCapture?.targetRotation = view.display.rotation
             }
@@ -73,10 +78,19 @@ class CameraActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
-        viewFinder = findViewById(R.id.previewView)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewFinder = binding.previewView
 
         // 카메라 권한 설정
         permissionCheck = PermissionCheck(this, object : PermissionCheck.PermissionListener {
@@ -89,7 +103,7 @@ class CameraActivity : AppCompatActivity() {
 
         // 백그라운드 준비
         cameraExecutor = Executors.newSingleThreadExecutor()
-        broadcastManager = LocalBroadcastManager.getInstance(this)
+        broadcastManager = LocalBroadcastManager.getInstance(requireContext())
 
         displayManager.registerDisplayListener(displayListener, null)
 
@@ -105,10 +119,11 @@ class CameraActivity : AppCompatActivity() {
 
         // 앨범으로 이동
         photo_view_button.setOnClickListener {
-            Log.e(TAG, "앨범버튼")
-
-            setResult(ALBUM_OK)
-            finish()
+            // 성공
+//            setResult(ALBUM_OK)
+//            finish()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, AlbumFragment()).commit()
         }
         // 카메라 회전
         camera_switch_button.setOnClickListener {
@@ -148,7 +163,7 @@ class CameraActivity : AppCompatActivity() {
         // 이미지 캡처에 전달, 오류, 저장 콜백 지정
         imageCapture.takePicture(
             outputOptions,
-            ContextCompat.getMainExecutor(this),
+            ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
@@ -165,7 +180,7 @@ class CameraActivity : AppCompatActivity() {
                     val mimeType = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(savedUri.toFile().extension)
                     MediaScannerConnection.scanFile(
-                        this@CameraActivity,
+                        context,
                         arrayOf(savedUri.toFile().absolutePath),
                         arrayOf(mimeType)
                     ) { path, uri ->
@@ -173,8 +188,10 @@ class CameraActivity : AppCompatActivity() {
                     }
 
                     val msg = "Photo capture succeeded: $savedUri"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+
+
                 }
             })
 
@@ -202,7 +219,7 @@ class CameraActivity : AppCompatActivity() {
 
     private fun startCamera() {
         // 카메라 라이프사이클 등록
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
         Log.d(TAG, "Screen metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
@@ -249,7 +266,7 @@ class CameraActivity : AppCompatActivity() {
             }
 
 
-        }, ContextCompat.getMainExecutor(this))
+        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     override fun onDestroy() {
@@ -259,11 +276,11 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+        val mediaDir = requireActivity().externalMediaDirs.firstOrNull()?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
         return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
+            mediaDir else requireActivity().filesDir
     }
 
     override fun onRequestPermissionsResult(
