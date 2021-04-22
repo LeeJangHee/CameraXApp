@@ -100,15 +100,17 @@ class CameraActivity : AppCompatActivity() {
         }
 
 
-        // 사진클릭 버튼 리스너
+        // 사진찍기
         camera_capture_button.setOnClickListener { takePhoto() }
+
+        // 앨범으로 이동
         photo_view_button.setOnClickListener {
-            // TODO: MainActivity -> AlbumFragment 이동
             Log.e(TAG, "앨범버튼")
 
             setResult(ALBUM_OK)
             finish()
         }
+        // 카메라 회전
         camera_switch_button.setOnClickListener {
             lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
                 CameraSelector.LENS_FACING_BACK
@@ -166,8 +168,8 @@ class CameraActivity : AppCompatActivity() {
                         this@CameraActivity,
                         arrayOf(savedUri.toFile().absolutePath),
                         arrayOf(mimeType)
-                    ) { _, uri ->
-                        Log.d(TAG, "Image capture scanned into media store: $uri")
+                    ) { path, uri ->
+                        Log.d(TAG, "Image capture scanned into media store: $uri, $path")
                     }
 
                     val msg = "Photo capture succeeded: $savedUri"
