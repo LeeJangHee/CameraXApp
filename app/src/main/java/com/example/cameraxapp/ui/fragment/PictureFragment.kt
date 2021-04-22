@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cameraxapp.R
+import com.example.cameraxapp.databinding.FragmentPictureBinding
 import com.example.cameraxapp.ui.activity.MainActivity
 import com.example.cameraxapp.util.Constants.Companion.PERMISSION_CAMERA
 import com.example.cameraxapp.util.Constants.Companion.TAG
@@ -20,6 +21,8 @@ class PictureFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
     lateinit var permissionCheck: PermissionCheck
+    var _binding: FragmentPictureBinding? = null
+    val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -31,7 +34,8 @@ class PictureFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_picture, container, false)
+        _binding = FragmentPictureBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +53,7 @@ class PictureFragment : Fragment() {
 
             })
 
-        view.iv_picture.setOnClickListener {
+        binding.ivPicture.setOnClickListener {
             permissionCheck.hasPermissions(arrayListOf(PERMISSION_CAMERA))
         }
 
