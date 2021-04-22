@@ -23,6 +23,7 @@ class DialogUtil {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 intent.data = Uri.parse("package:" + activity.packageName)
                 activity.startActivity(intent)
+                activity.finish()
             }
             .create()
 
