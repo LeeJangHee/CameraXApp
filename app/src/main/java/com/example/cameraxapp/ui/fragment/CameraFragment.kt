@@ -92,13 +92,6 @@ class CameraFragment : Fragment() {
 
         viewFinder = binding.previewView
 
-        // 카메라 권한 설정
-        permissionCheck = PermissionCheck(this, object : PermissionCheck.PermissionListener {
-            override fun permissionAllowed() {
-                Log.e(TAG, "카메라 엑티비티")
-//                startCamera()
-            }
-        })
         permissionCheck.hasPermissions(arrayListOf(Manifest.permission.CAMERA))
 
         // 백그라운드 준비
@@ -115,10 +108,10 @@ class CameraFragment : Fragment() {
 
 
         // 사진찍기
-        camera_capture_button.setOnClickListener { takePhoto() }
+        binding.cameraCaptureButton.setOnClickListener { takePhoto() }
 
         // 앨범으로 이동
-        photo_view_button.setOnClickListener {
+        binding.photoViewButton.setOnClickListener {
             // 성공
 //            setResult(ALBUM_OK)
 //            finish()
@@ -126,7 +119,7 @@ class CameraFragment : Fragment() {
                 .replace(R.id.fragment, AlbumFragment()).commit()
         }
         // 카메라 회전
-        camera_switch_button.setOnClickListener {
+        binding.cameraSwitchButton.setOnClickListener {
             lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
                 CameraSelector.LENS_FACING_BACK
             } else {
@@ -281,15 +274,6 @@ class CameraFragment : Fragment() {
         }
         return if (mediaDir != null && mediaDir.exists())
             mediaDir else requireActivity().filesDir
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionCheck.onRequestPermissionResult(requestCode, permissions, grantResults)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
