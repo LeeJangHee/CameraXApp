@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.hardware.display.DisplayManager
+import android.media.MediaActionSound
+import android.media.MediaPlayer
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -51,7 +53,6 @@ class CameraFragment : Fragment() {
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var permissionCheck: PermissionCheck
     private lateinit var broadcastManager: LocalBroadcastManager
     private lateinit var viewFinder: PreviewView
 
@@ -92,8 +93,6 @@ class CameraFragment : Fragment() {
 
         viewFinder = binding.previewView
 
-        permissionCheck.hasPermissions(arrayListOf(Manifest.permission.CAMERA))
-
         // 백그라운드 준비
         cameraExecutor = Executors.newSingleThreadExecutor()
         broadcastManager = LocalBroadcastManager.getInstance(requireContext())
@@ -108,7 +107,12 @@ class CameraFragment : Fragment() {
 
 
         // 사진찍기
-        binding.cameraCaptureButton.setOnClickListener { takePhoto() }
+        binding.cameraCaptureButton.setOnClickListener {
+            takePhoto()
+            // 카메라 셔터 소리
+            val cameraSound = MediaActionSound()
+            cameraSound.play(MediaActionSound.SHUTTER_CLICK)
+        }
 
         // 앨범으로 이동
         binding.photoViewButton.setOnClickListener {
