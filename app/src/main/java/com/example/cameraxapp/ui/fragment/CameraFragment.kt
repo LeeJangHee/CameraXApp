@@ -1,13 +1,11 @@
 package com.example.cameraxapp.ui.fragment
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.hardware.display.DisplayManager
 import android.media.MediaActionSound
-import android.media.MediaPlayer
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -28,6 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.FragmentCameraBinding
+import com.example.cameraxapp.util.Constants
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_FAST_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_SLOW_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.TAG
@@ -43,6 +42,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class CameraFragment : Fragment() {
+    private var cameraCheck = false
     private var imageCapture: ImageCapture? = null
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var camera: Camera? = null
@@ -51,6 +51,7 @@ class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var permissionCheck: PermissionCheck
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var broadcastManager: LocalBroadcastManager
@@ -84,12 +85,21 @@ class CameraFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        permissionCheck =
+            PermissionCheck(this@CameraFragment, object : PermissionCheck.PermissionListener {
+                override fun permissionAllowed() {
+                    cameraCheck = true
+                }
+
+            })
+
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         viewFinder = binding.previewView
 
@@ -101,8 +111,11 @@ class CameraFragment : Fragment() {
 
         viewFinder.post {
             displayId = viewFinder.display.displayId
+            permissionCheck.hasPermissions(arrayListOf(Constants.PERMISSION_CAMERA))
 
-            startCamera()
+            if (cameraCheck) {
+                startCamera()
+            }
         }
 
 
@@ -278,6 +291,15 @@ class CameraFragment : Fragment() {
         }
         return if (mediaDir != null && mediaDir.exists())
             mediaDir else requireActivity().filesDir
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionCheck.onRequestPermissionResult(requestCode, permissions, grantResults)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
