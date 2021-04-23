@@ -2,7 +2,7 @@ package com.example.cameraxapp.model
 
 import java.io.File
 
-data class Picture(
+data class PictureModel(
     val path: String,
     val date: String,
     val index: Int,
