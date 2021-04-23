@@ -32,7 +32,9 @@ import com.example.cameraxapp.util.Constants.Companion.ANIMATION_SLOW_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.PermissionCheck
 import kotlinx.android.synthetic.main.fragment_camera.*
+import kotlinx.coroutines.*
 import java.io.File
+import java.lang.Runnable
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -85,15 +87,16 @@ class CameraFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentCameraBinding.inflate(inflater, container, false)
         permissionCheck =
             PermissionCheck(this@CameraFragment, object : PermissionCheck.PermissionListener {
                 override fun permissionAllowed() {
                     cameraCheck = true
+                    binding.cameraView.visibility = View.VISIBLE
                 }
 
             })
 
-        _binding = FragmentCameraBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -124,7 +127,7 @@ class CameraFragment : Fragment() {
             takePhoto()
             // 카메라 셔터 소리
             val cameraSound = MediaActionSound()
-            cameraSound.play(MediaActionSound.SHUTTER_CLICK)
+//            cameraSound.play(MediaActionSound.SHUTTER_CLICK)
         }
 
         // 앨범으로 이동
@@ -183,10 +186,6 @@ class CameraFragment : Fragment() {
                     val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
                     Log.d(TAG, "Photo succeeded: $savedUri")
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                    }
-
                     val mimeType = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(savedUri.toFile().extension)
                     MediaScannerConnection.scanFile(
@@ -197,10 +196,12 @@ class CameraFragment : Fragment() {
                         Log.d(TAG, "Image capture scanned into media store: $uri, $path")
                     }
 
-                    val msg = "Photo capture succeeded: $savedUri"
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
 
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(300)
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment, PictureFragment()).commit()
+                    }
 
                 }
             })

@@ -43,7 +43,7 @@ class PictureFragment : Fragment() {
 
     }
 
-    fun openFragment() {
+    private fun openFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment, CameraFragment()).commit()
     }
