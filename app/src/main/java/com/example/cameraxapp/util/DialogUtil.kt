@@ -17,16 +17,19 @@ class DialogUtil {
         }
         deniedString += "${deniedPermissionList[listIndex]} 권한이 없습니다."
 
-        val dialog = AlertDialog.Builder(activity)
-            .setMessage(deniedString)
-            .setPositiveButton("확인") { dialog, which ->
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.parse("package:" + activity.packageName)
-                activity.startActivity(intent)
-                activity.finish()
-            }
-            .create()
 
-        dialog.show()
+        val customDialog = CustomDialog(activity, deniedString)
+        customDialog.show()
+//        val dialog = AlertDialog.Builder(activity)
+//            .setMessage(deniedString)
+//            .setPositiveButton("확인") { dialog, which ->
+//                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                intent.data = Uri.parse("package:" + activity.packageName)
+//                activity.startActivity(intent)
+//                activity.finish()
+//            }
+//            .create()
+//
+//        dialog.show()
     }
 }
