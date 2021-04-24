@@ -19,7 +19,7 @@ class CustomDialog constructor(context: Context, message:String): Dialog(context
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        dialog_message.text = message
+        dialog_message_attr.text = message
 
 
     }
