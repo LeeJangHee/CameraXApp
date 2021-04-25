@@ -5,22 +5,63 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import com.example.cameraxapp.R
-import kotlinx.android.synthetic.main.dialog_custom.*
+import android.view.View
+import com.example.cameraxapp.databinding.DialogCustomBinding
 
+enum class DialogType {
+    ERROR,
+    OK,
+    WARNING,
+    CANCEL
+}
 
 class CustomDialog constructor(context: Context, message:String): Dialog(context) {
+
+    private var _binding: DialogCustomBinding? = null
+    private val binding get() = _binding!!
+
+    var boolBtnOk: Int = View.VISIBLE
+    var boolBtnCancel: Int = View.VISIBLE
 
     var message: String = message
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_custom)
+        _binding = DialogCustomBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        dialog_message_attr.text = message
+        binding.dialogMessageAttr.text = message
+        binding.dialogCancelAttr.visibility = boolBtnCancel
+        binding.dialogOkAttr.visibility = boolBtnOk
+    }
 
+
+
+    fun oneButtonDialog(dialogType: DialogType) {
+        when(dialogType) {
+            DialogType.ERROR -> {
+                // 취소
+                boolBtnOk = View.GONE
+            }
+            DialogType.CANCEL -> {
+                // 취소
+                boolBtnOk = View.GONE
+            }
+            DialogType.WARNING -> {
+                // 확인
+                boolBtnCancel = View.GONE
+            }
+            DialogType.OK -> {
+                // 확인
+                boolBtnCancel = View.GONE
+            }
+        }
+    }
+
+    fun twoButtonDialog() {
 
     }
+
 }

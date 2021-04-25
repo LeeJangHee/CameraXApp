@@ -1,10 +1,6 @@
 package com.example.cameraxapp.util
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 
 class DialogUtil {
 
@@ -19,6 +15,7 @@ class DialogUtil {
 
 
         val customDialog = CustomDialog(activity, deniedString)
+        customDialog.oneButtonDialog(DialogType.OK)
         customDialog.show()
 //        val dialog = AlertDialog.Builder(activity)
 //            .setMessage(deniedString)
