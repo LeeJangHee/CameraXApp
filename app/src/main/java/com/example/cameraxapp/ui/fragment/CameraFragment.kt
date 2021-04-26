@@ -21,6 +21,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -80,7 +81,7 @@ class CameraFragment : Fragment() {
     }
 
     companion object {
-        private const val DATE_FORMAT = "yyyy-MM-dd"
+        private const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
         private const val FILENAME_FORMAT = "roundId_index"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
@@ -114,16 +115,18 @@ class CameraFragment : Fragment() {
         viewFinder = binding.previewView
 
         pictureViewModel.getAllPictureData().observe(viewLifecycleOwner) {
-
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, PictureFragment()).commit()
         }
 
         // 백그라운드 준비
         cameraExecutor = Executors.newSingleThreadExecutor()
-        broadcastManager = LocalBroadcastManager.getInstance(requireContext())
+        broadcastManager = LocalBroadcastManager.getInstance(view.context)
 
         displayManager.registerDisplayListener(displayListener, null)
 
         viewFinder.post {
+            // TODO: 다시 누르면 멈춤....
             displayId = viewFinder.display.displayId
             permissionCheck.hasPermissions(arrayListOf(Constants.PERMISSION_CAMERA))
 
@@ -211,8 +214,7 @@ class CameraFragment : Fragment() {
                                 )
                             )
                         )
-                        requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment, PictureFragment()).commit()
+
                     }
 
                     val mimeType = MimeTypeMap.getSingleton()
