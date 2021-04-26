@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.example.cameraxapp.viewmodel.PictureViewModel" />
+        <variable
+            name="index"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@mipmap/ic_launcher"
+            imageFromUrl="@{viewModel.getPictureData(index).imageUrl}"
             android:clickable="true"
             android:focusable="true" />
     </androidx.constraintlayout.widget.ConstraintLayout>

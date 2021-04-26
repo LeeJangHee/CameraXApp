@@ -16,21 +16,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.FragmentCameraBinding
+import com.example.cameraxapp.model.PictureModel
 import com.example.cameraxapp.util.Constants
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_FAST_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_SLOW_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.PermissionCheck
+import com.example.cameraxapp.viewmodel.PictureViewModel
 import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.coroutines.*
 import java.io.File
@@ -52,6 +55,8 @@ class CameraFragment : Fragment() {
     private var displayId: Int = -1
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
+
+    private val pictureViewModel: PictureViewModel by activityViewModels()
 
     private lateinit var permissionCheck: PermissionCheck
     private lateinit var outputDirectory: File
@@ -88,13 +93,17 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
         permissionCheck =
             PermissionCheck(this@CameraFragment, object : PermissionCheck.PermissionListener {
                 override fun permissionAllowed() {
                     cameraCheck = true
                     binding.cameraView.visibility = View.VISIBLE
                 }
-
             })
 
         return binding.root
@@ -102,9 +111,11 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         viewFinder = binding.previewView
+
+        pictureViewModel.getAllPictureData().observe(viewLifecycleOwner) {
+
+        }
 
         // 백그라운드 준비
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -178,29 +189,41 @@ class CameraFragment : Fragment() {
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
+
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
+                // 이미지 저장 위치
+                // Adnroid/data/앱패키지명/cache
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
                     Log.d(TAG, "Photo succeeded: $savedUri")
 
+                    lifecycleScope.launch {
+                        pictureViewModel.setTakePhoto(
+                            arrayListOf(
+                                PictureModel(
+                                    savedUri.toString(),
+                                    SimpleDateFormat(DATE_FORMAT, Locale.KOREA).format(System.currentTimeMillis()),
+                                    0,
+                                    photoFile
+                                )
+                            )
+                        )
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment, PictureFragment()).commit()
+                    }
+
                     val mimeType = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(savedUri.toFile().extension)
+
                     MediaScannerConnection.scanFile(
                         context,
                         arrayOf(savedUri.toFile().absolutePath),
                         arrayOf(mimeType)
                     ) { path, uri ->
                         Log.d(TAG, "Image capture scanned into media store: $uri, $path")
-                    }
-
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(300)
-                        requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment, PictureFragment()).commit()
                     }
 
                 }
@@ -233,10 +256,7 @@ class CameraFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
-        Log.d(TAG, "Screen metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
-
         val screenAspectRatio = aspectRatio(metrics.widthPixels, metrics.heightPixels)
-        Log.d(TAG, "Preview aspect ratio: $screenAspectRatio")
 
         val rotation = viewFinder.display.rotation
 
@@ -280,15 +300,17 @@ class CameraFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop: ")
         cameraExecutor.shutdown()
         displayManager.unregisterDisplayListener(displayListener)
     }
 
     private fun getOutputDirectory(): File {
-        val mediaDir = requireActivity().externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+        // 앱 내부 캐시 폴더에 저장
+        val mediaDir = requireActivity().externalCacheDirs.firstOrNull()?.let {
+            File(it, "").apply { mkdirs() }
         }
         return if (mediaDir != null && mediaDir.exists())
             mediaDir else requireActivity().filesDir
