@@ -22,6 +22,12 @@ class DialogUtil {
         CustomDialog(activity)
             .apply {
                 setDialogMessage(message = deniedString)
+                setPositiveButton("확인") {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.parse("package:" + activity.packageName)
+                    activity.startActivity(intent)
+                    activity.finish()
+                }
                 setNegativeButton("취소") {
                     Toast.makeText(activity, "취소버튼", Toast.LENGTH_SHORT).show()
                 }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.cameraxapp.R
@@ -14,6 +15,10 @@ import com.example.cameraxapp.databinding.FragmentPictureBinding
 import com.example.cameraxapp.ui.activity.MainActivity
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.viewmodel.PictureViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class PictureFragment : Fragment() {
@@ -36,20 +41,26 @@ class PictureFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentPictureBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = pictureViewModel
+            index = 0
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.apply {
-            viewModel = pictureViewModel
-            index = 0
+        binding.button.setOnClickListener {
+            openCameraFragment()
         }
+
         binding.ivPicture.setOnClickListener {
             openCameraFragment()
         }
+
 
     }
 

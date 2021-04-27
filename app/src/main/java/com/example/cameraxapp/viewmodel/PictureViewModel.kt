@@ -27,4 +27,8 @@ class PictureViewModel : ViewModel() {
         return pictureLiveData.value?.get(index)
     }
 
+    fun getPictureArray(): ArrayList<PictureModel>? {
+        return pictureLiveData.value
+    }
+
 }

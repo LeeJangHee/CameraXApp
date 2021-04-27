@@ -1,5 +1,6 @@
 package com.example.cameraxapp.ui.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -21,7 +22,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
-import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -51,8 +51,6 @@ class CameraFragment : Fragment() {
     private var cameraCheck = false
     private var imageCapture: ImageCapture? = null
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
-    private var camera: Camera? = null
-    private var cameraProvider: ProcessCameraProvider? = null
     private var displayId: Int = -1
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
@@ -64,6 +62,7 @@ class CameraFragment : Fragment() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var broadcastManager: LocalBroadcastManager
     private lateinit var viewFinder: PreviewView
+    private lateinit var context: Activity
 
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
@@ -88,51 +87,56 @@ class CameraFragment : Fragment() {
 
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.context = context as Activity
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            viewFinder = previewView
         }
 
         permissionCheck =
             PermissionCheck(this@CameraFragment, object : PermissionCheck.PermissionListener {
                 override fun permissionAllowed() {
                     cameraCheck = true
-                    binding.cameraView.visibility = View.VISIBLE
                 }
             })
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewFinder = binding.previewView
-
+        val prePictureArray = pictureViewModel.getPictureArray()
         pictureViewModel.getAllPictureData().observe(viewLifecycleOwner) {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment, PictureFragment()).commit()
+            if (it != prePictureArray) {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, PictureFragment()).commit()
+            }
         }
 
         // 백그라운드 준비
         cameraExecutor = Executors.newSingleThreadExecutor()
-        broadcastManager = LocalBroadcastManager.getInstance(view.context)
+        broadcastManager = LocalBroadcastManager.getInstance(requireContext())
 
         displayManager.registerDisplayListener(displayListener, null)
 
         viewFinder.post {
-            // TODO: 다시 누르면 멈춤....
             displayId = viewFinder.display.displayId
             permissionCheck.hasPermissions(arrayListOf(Constants.PERMISSION_CAMERA))
 
             if (cameraCheck) {
                 startCamera()
             }
+
         }
 
 
@@ -208,7 +212,10 @@ class CameraFragment : Fragment() {
                             arrayListOf(
                                 PictureModel(
                                     savedUri.toString(),
-                                    SimpleDateFormat(DATE_FORMAT, Locale.KOREA).format(System.currentTimeMillis()),
+                                    SimpleDateFormat(
+                                        DATE_FORMAT,
+                                        Locale.KOREA
+                                    ).format(System.currentTimeMillis()),
                                     0,
                                     photoFile
                                 )
@@ -275,7 +282,7 @@ class CameraFragment : Fragment() {
                     it.setSurfaceProvider(viewFinder.createSurfaceProvider())
                 }
 
-            // 캡처 이미지 추가(토스트)
+            // 캡처 이미지 추가
             imageCapture = ImageCapture.Builder()
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .setTargetAspectRatio(screenAspectRatio)
@@ -305,6 +312,7 @@ class CameraFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop: ")
+
         cameraExecutor.shutdown()
         displayManager.unregisterDisplayListener(displayListener)
     }
