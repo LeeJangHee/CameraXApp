@@ -16,17 +16,18 @@ class CustomDialog constructor(context: Context): Dialog(context) {
     private var _binding: DialogCustomBinding? = null
     private val binding get() = _binding!!
 
-    var boolBtnOk: Int = View.VISIBLE
-    var boolBtnCancel: Int = View.VISIBLE
+    var boolPositiveButton: Int = View.GONE
+    var boolNegativeButton: Int = View.GONE
     var boolImage: Int = View.GONE
-    var image: String = R.mipmap.ic_launcher.toString()
+    var image: Int = R.mipmap.ic_launcher
 
     var okClickListener: View.OnClickListener? = null
     var cancelClickListener: View.OnClickListener? = null
-    var btnOkText: String = "확인"
-    var btnCancelText: String = "취소"
+    var positiveButtonText: String = "확인"
+    var negativeButtonText: String = "취소"
 
     lateinit var message: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,48 +39,43 @@ class CustomDialog constructor(context: Context): Dialog(context) {
         binding.apply {
             dialogMessageAttr.text = message
 
-            dialogCancelAttr.visibility = boolBtnCancel
-            dialogCancelAttr.text = btnCancelText
+            dialogCancelAttr.visibility = boolNegativeButton
+            dialogCancelAttr.text = negativeButtonText
             dialogCancelAttr.setOnClickListener(cancelClickListener)
 
-            dialogOkAttr.visibility = boolBtnOk
-            dialogOkAttr.text = btnOkText
+            dialogOkAttr.visibility = boolPositiveButton
+            dialogOkAttr.text = positiveButtonText
             dialogOkAttr.setOnClickListener(okClickListener)
 
             dialogImage.visibility = boolImage
             Glide.with(binding.root)
                 .load(image)
+                .override(200)
                 .into(dialogImage)
+
+            setCancelable(false)
         }
     }
 
-    fun setButtonText(btnOkText: String, btnCancelText: String) {
-        this.btnOkText = btnOkText
-        this.btnCancelText = btnCancelText
-    }
-
-    fun setContent(message: String) {
+    fun setDialogMessage(message: String) {
         this.message = message
     }
 
-    fun setHeaderImage(image: String) {
+    fun setHeaderImage(image: Int) {
         boolImage = View.VISIBLE
         this.image = image
     }
 
-    fun okButtonDialog(clickListener: View.OnClickListener) {
-        boolBtnOk = View.GONE
+    fun setPositiveButton(positiveButtonText: String, clickListener: View.OnClickListener?) {
+        boolPositiveButton = View.VISIBLE
+        this.positiveButtonText = positiveButtonText
         okClickListener = clickListener
     }
 
-    fun cancelButtonDialog(clickListener: View.OnClickListener) {
-        boolBtnCancel = View.GONE
+    fun setNegativeButton(negativeButtonText: String, clickListener: View.OnClickListener?) {
+        boolNegativeButton = View.VISIBLE
+        this.negativeButtonText = negativeButtonText
         cancelClickListener = clickListener
-    }
-
-    fun twoButtonDialog(okClickListener: View.OnClickListener, cancelClickListener: View.OnClickListener) {
-        this.okClickListener = okClickListener
-        this.cancelClickListener = cancelClickListener
     }
 
 }

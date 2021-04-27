@@ -32,17 +32,17 @@ class RoundDialog @JvmOverloads constructor(
         }
     }
 
-    fun setCornerRadius() {
+    private fun setCornerRadius() {
         val background = background
-        val gd = GradientDrawable()
+        val gradientDrawable = GradientDrawable()
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            gd.cornerRadius = cornerRadius.toFloat()
+            gradientDrawable.cornerRadius = cornerRadius.toFloat()
         }
 
         if (background is ColorDrawable) {
-            gd.setColor(background.color)
+            gradientDrawable.setColor(background.color)
         }
-        setBackground(gd)
+        setBackground(gradientDrawable)
         clipToOutline = true
     }
 }

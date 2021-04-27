@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
+import com.example.cameraxapp.R
 
 class DialogUtil {
 
@@ -18,14 +19,14 @@ class DialogUtil {
         deniedString += "${deniedPermissionList[listIndex]} 권한이 없습니다."
 
 
-        val customDialog = CustomDialog(context = activity)
-        customDialog.setContent(message = deniedString)
-        customDialog.okButtonDialog {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            intent.data = Uri.parse("package:" + activity.packageName)
-            activity.startActivity(intent)
-            activity.finish()
-        }
-        customDialog.show()
+        CustomDialog(activity)
+            .apply {
+                setDialogMessage(message = deniedString)
+                setNegativeButton("취소") {
+                    Toast.makeText(activity, "취소버튼", Toast.LENGTH_SHORT).show()
+                }
+                setHeaderImage(R.mipmap.ic_launcher)
+                show()
+            }
     }
 }
