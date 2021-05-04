@@ -16,6 +16,7 @@ import com.example.cameraxapp.databinding.FragmentPictureBinding
 import com.example.cameraxapp.ui.activity.MainActivity
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.ProgressDialog
+import com.example.cameraxapp.util.ProgressbarDialog
 import com.example.cameraxapp.viewmodel.PictureViewModel
 
 
@@ -52,9 +53,15 @@ class PictureFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.button.setOnClickListener {
-            val loadingDialog = ProgressDialog(requireContext())
-            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            loadingDialog.show()
+            // 원형
+//            val loadingDialog = ProgressDialog(requireContext())
+//            loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            loadingDialog.show()
+
+            // 막대
+            val loadingHorizontal = ProgressbarDialog(requireContext())
+            loadingHorizontal.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            loadingHorizontal.show()
         }
 
         binding.ivPicture.setOnClickListener {
