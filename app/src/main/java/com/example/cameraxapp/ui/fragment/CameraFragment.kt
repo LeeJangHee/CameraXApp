@@ -52,6 +52,7 @@ class CameraFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var displayId: Int = -1
+    private var viewModelArray: Array<PictureModel?> = arrayOfNulls(8)
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
@@ -85,6 +86,15 @@ class CameraFragment : Fragment() {
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
 
+        @JvmStatic
+        fun newInstance(index: Int): CameraFragment {
+            val args = Bundle()
+            args.putInt("index", index)
+            val fragment = CameraFragment()
+            fragment.arguments = args
+            return fragment
+        }
+
     }
 
     override fun onAttach(context: Context) {
@@ -106,6 +116,7 @@ class CameraFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewFinder = previewView
+
         }
 
         permissionCheck =
@@ -206,21 +217,21 @@ class CameraFragment : Fragment() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
                     Log.d(TAG, "Photo succeeded: $savedUri")
-
+                    val pictureList: ArrayList<PictureModel?> = arrayListOf()
                     lifecycleScope.launch {
-                        pictureViewModel.setTakePhoto(
-                            arrayListOf(
-                                PictureModel(
-                                    savedUri.toString(),
-                                    SimpleDateFormat(
-                                        DATE_FORMAT,
-                                        Locale.KOREA
-                                    ).format(System.currentTimeMillis()),
-                                    0,
-                                    photoFile
-                                )
-                            )
+                        viewModelArray[0] = PictureModel(
+                            savedUri.toString(),
+                            SimpleDateFormat(
+                                DATE_FORMAT,
+                                Locale.KOREA
+                            ).format(System.currentTimeMillis()),
+                            0,
+                            photoFile
                         )
+                        viewModelArray.forEach {
+                            pictureList.add(it)
+                        }
+                        pictureViewModel.setTakePhoto(pictureList)
 
                     }
 

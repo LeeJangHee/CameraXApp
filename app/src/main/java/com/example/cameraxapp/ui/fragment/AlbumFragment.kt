@@ -5,10 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.cameraxapp.R
+import com.example.cameraxapp.databinding.FragmentAlbumBinding
+import com.example.cameraxapp.viewmodel.PictureViewModel
 
 class AlbumFragment : Fragment() {
 
+    var _binding: FragmentAlbumBinding? = null
+    val binding get() = _binding!!
+    private val pictureViewModel: PictureViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -16,7 +22,12 @@ class AlbumFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         // 테스트 코드
-        return inflater.inflate(R.layout.fragment_album, container, false)
+        _binding = FragmentAlbumBinding.inflate(inflater, container, false)
+        binding.apply {
+            viewModel = pictureViewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

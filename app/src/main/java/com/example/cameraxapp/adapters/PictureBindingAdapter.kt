@@ -1,5 +1,6 @@
 package com.example.cameraxapp.adapters
 
+import android.media.Image
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -19,4 +20,9 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
             .centerCrop()
             .into(view)
     }
+}
+
+@BindingAdapter("album_click_position")
+fun bindAlbumClickPosition(view: Image) {
+
 }
