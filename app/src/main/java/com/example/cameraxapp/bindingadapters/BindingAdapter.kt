@@ -1,4 +1,4 @@
-package com.example.cameraxapp.adapters
+package com.example.cameraxapp.bindingadapters
 
 import android.view.View
 import androidx.databinding.BindingAdapter
