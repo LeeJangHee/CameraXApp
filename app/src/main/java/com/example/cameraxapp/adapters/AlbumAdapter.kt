@@ -1,7 +1,9 @@
 package com.example.cameraxapp.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cameraxapp.databinding.FragmentAlbumBinding
@@ -12,12 +14,23 @@ import com.example.cameraxapp.util.AlbumDiffUtil
 class AlbumAdapter: RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
 
     private var pictureList = List<PictureModel?>(8){ null } as ArrayList<PictureModel?>
+    val pre_index = -1
 
 
     class AlbumViewHolder(private val binding: ItemAlbumBinding):
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(pictureModel: PictureModel) {
+
+        init {
+            binding.albumImageView.setOnLongClickListener {
+
+                return@setOnLongClickListener true
+            }
+        }
+
+        fun bind(pictureModel: PictureModel, now_index: Int, pre_index: Int) {
             with(binding) {
+                preIndex = pre_index
+
                 result = pictureModel
                 executePendingBindings()
             }
@@ -35,7 +48,10 @@ class AlbumAdapter: RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        pictureList[position]?.let { holder.bind(it) }
+        pictureList[position]?.let { holder.bind(it, position, pre_index) }
+//        holder.itemView.setOnClickListener {
+//            Toast.makeText(holder.itemView.context, "test $position", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     override fun getItemCount(): Int {
