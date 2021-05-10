@@ -21,9 +21,9 @@ class AlbumAdapter: RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.albumImageView.setOnLongClickListener {
-
-                return@setOnLongClickListener true
+            binding.albumImageView.setOnClickListener {
+                binding.buttonView.visibility = View.VISIBLE
+//                return@setOnLongClickListener true
             }
         }
 

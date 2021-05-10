@@ -15,6 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
         tools:context=".ui.fragment.AlbumFragment">
 
 <!--        <ImageView-->
@@ -115,6 +116,7 @@
             android:layout_marginStart="48dp"
             android:layout_marginTop="68dp"
             android:layout_marginEnd="42dp"
+            android:clipChildren="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
