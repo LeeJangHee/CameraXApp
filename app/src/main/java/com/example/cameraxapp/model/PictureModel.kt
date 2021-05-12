@@ -6,5 +6,6 @@ data class PictureModel(
     val imageUrl: String,
     val date: String,
     val index: Int,
-    val file: File
+    val file: File,
+    val visible: Boolean
 )

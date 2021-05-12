@@ -39,11 +39,13 @@ class AlbumFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            pictureViewModel.getAllPictureData().observe(viewLifecycleOwner, {
+            pictureViewModel.getAllPictureData().observe(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     albumAdapter.setData(it)
                 }
-            })
+            }
         }
     }
+
+
 }

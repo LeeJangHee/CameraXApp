@@ -9,6 +9,10 @@ class PictureViewModel : ViewModel() {
     private var _pictureLiveData: MutableLiveData<ArrayList<PictureModel?>> = MutableLiveData()
     private val pictureLiveData get() = _pictureLiveData
 
+    private var _buttonViewLiveData: MutableLiveData<List<Boolean>> = MutableLiveData()
+    private val buttonViewLiveData get() = _buttonViewLiveData
+
+
     fun setTakePhoto(picture: ArrayList<PictureModel?>) {
         _pictureLiveData.value = picture
     }

@@ -8,8 +8,11 @@
             name="result"
             type="com.example.cameraxapp.model.PictureModel" />
         <variable
-            name="pre_index"
-            type="Integer" />
+            name="bool"
+            type="Boolean" />
+        <variable
+            name="click"
+            type="com.example.cameraxapp.adapters.AlbumAdapter.AlbumListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,19 +25,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/button_view"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="parent"
+            android:visibility="gone"
+            isButtonView="@{bool}"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageButton
+            <Button
                 android:id="@+id/album_cancel"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/album_cancel"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"

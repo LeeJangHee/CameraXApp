@@ -52,7 +52,7 @@ class CameraFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var displayId: Int = -1
-    private var viewModelArray: Array<PictureModel?> = arrayOfNulls(8)
+    private var viewModelArray = List<PictureModel?>(8) { null } as ArrayList<PictureModel?>
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
@@ -226,7 +226,8 @@ class CameraFragment : Fragment() {
                                 Locale.KOREA
                             ).format(System.currentTimeMillis()),
                             0,
-                            photoFile
+                            photoFile,
+                            false
                         )
                         viewModelArray.forEach {
                             pictureList.add(it)
