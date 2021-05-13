@@ -2,7 +2,7 @@ package com.example.cameraxapp.bindingadapters
 
 import android.view.View
 import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.LinearLayout
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.cameraxapp.R
@@ -24,8 +24,8 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
 }
 
 @BindingAdapter("isButtonView")
-fun bindIsButtonView(constraintLayout: ConstraintLayout, visible: Boolean) {
-    constraintLayout.visibility = if (visible) {
+fun bindIsButtonView(linearLayout: LinearLayout, visible: Boolean) {
+    linearLayout.visibility = if (visible) {
         View.VISIBLE
     } else {
         View.GONE

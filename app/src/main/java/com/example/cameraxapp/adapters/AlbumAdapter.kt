@@ -17,7 +17,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     private var pictureList = List<PictureModel?>(8) { null } as ArrayList<PictureModel?>
     private var buttonView = ArrayList<Boolean>()
-    private var selectItemIndex = 0
+    private var selectItemIndex = -1
 
 
     inner class AlbumViewHolder(
@@ -71,8 +71,22 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
             val preIndex = selectItemIndex
             selectItemIndex = position
 
-            this@AlbumAdapter.buttonView[preIndex] = !this@AlbumAdapter.buttonView[preIndex]
-            this@AlbumAdapter.buttonView[position] = !this@AlbumAdapter.buttonView[position]
+            if (preIndex < 0) {
+                this@AlbumAdapter.buttonView[position] = !this@AlbumAdapter.buttonView[position]
+                notifyItemChanged(position)
+            } else {
+                if (preIndex == position) {
+                    this@AlbumAdapter.buttonView[preIndex] = !this@AlbumAdapter.buttonView[preIndex]
+                    notifyItemChanged(preIndex)
+                    return@setOnClickListener
+                }
+                this@AlbumAdapter.buttonView[preIndex] = !this@AlbumAdapter.buttonView[preIndex]
+                this@AlbumAdapter.buttonView[position] = !this@AlbumAdapter.buttonView[position]
+
+                notifyItemChanged(preIndex)
+                notifyItemChanged(position)
+            }
+
         }
 //        holder.itemView.setOnClickListener {
 //            val preIndex = selectItemIndex
@@ -93,10 +107,12 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
     }
 
     fun setData(newList: ArrayList<PictureModel?>) {
-        val albumDiffUtil = AlbumDiffUtil(oldList = pictureList, newList = newList)
-        val diffUtilResult = DiffUtil.calculateDiff(albumDiffUtil)
         pictureList = newList
-        diffUtilResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
+//        val albumDiffUtil = AlbumDiffUtil(oldList = pictureList, newList = newList)
+//        val diffUtilResult = DiffUtil.calculateDiff(albumDiffUtil)
+//        pictureList = newList
+//        diffUtilResult.dispatchUpdatesTo(this)
     }
 
     fun interface AlbumListener {
