@@ -11,8 +11,8 @@
             name="bool"
             type="Boolean" />
         <variable
-            name="click"
-            type="com.example.cameraxapp.adapters.AlbumAdapter.AlbumListener" />
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <LinearLayout
