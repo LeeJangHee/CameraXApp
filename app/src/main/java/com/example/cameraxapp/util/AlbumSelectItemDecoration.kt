@@ -2,20 +2,20 @@ package com.example.cameraxapp.util
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Rect
 import android.util.TypedValue
 import android.view.View
-import android.widget.TextView
-import androidx.compose.ui.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cameraxapp.util.Constants.Companion.buttonViewList
 
 class AlbumSelectItemDecoration(private val context: Context) : RecyclerView.ItemDecoration() {
 
-    private val paint = Paint()
+//    var buttonViewList = ArrayList<Boolean>()
 
     init {
-        paint.color = androidx.compose.ui.graphics.Color.Transparent
+        for (i in 0 until 8) {
+            buttonViewList.add(false)
+        }
     }
 
     fun drawView(c: Canvas, v: View) {
@@ -36,10 +36,14 @@ class AlbumSelectItemDecoration(private val context: Context) : RecyclerView.Ite
 
         val position = parent.getChildAdapterPosition(view)
 
+        if (buttonViewList[position]) {
+            outRect.top = dpToPx(context, 50f).toInt() * -1
+//            outRect.bottom = dpToPx(context, 50f).toInt() * - 1
+        } else {
+            outRect.top = dpToPx(context, 10f).toInt()
+            outRect.bottom = dpToPx(context, 10f).toInt()
+        }
 
-
-        outRect.top = dpToPx(context, 10f).toInt()
-        outRect.bottom = dpToPx(context, 10f).toInt()
     }
 
 

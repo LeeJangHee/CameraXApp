@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cameraxapp.databinding.ItemAlbumBinding
 import com.example.cameraxapp.model.PictureModel
+import com.example.cameraxapp.util.Constants.Companion.buttonViewList
 
 const val TAG = "janghee"
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     private var pictureList = List<PictureModel?>(8) { null } as ArrayList<PictureModel?>
-    private var buttonViewList = ArrayList<Boolean>()
+//    private var buttonViewList = ArrayList<Boolean>()
     private var selectItemIndex = -1 // -1 : not selected  / 0: first item
 
 
@@ -43,7 +44,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        buttonViewList.add(false)
+//        buttonViewList.add(false)
 
         // 버튼 visible / gone
         holder.binding.bool = buttonViewList[position]

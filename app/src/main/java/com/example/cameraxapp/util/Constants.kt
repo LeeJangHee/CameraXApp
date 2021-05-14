@@ -30,5 +30,7 @@ class Constants {
         const val ANIMATION_FAST_MILLIS = 50L
         const val ANIMATION_SLOW_MILLIS = 100L
 
+        var buttonViewList = ArrayList<Boolean>()
+
     }
 }
