@@ -73,7 +73,7 @@ class PictureFragment : Fragment() {
 
     private fun openCameraFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment, CameraFragment()).commit()
+            .replace(R.id.fragment, CameraFragment.newInstance(0, "club")).commit()
     }
 
 

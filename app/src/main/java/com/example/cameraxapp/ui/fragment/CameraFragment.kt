@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.cameraxapp.R
@@ -55,6 +56,9 @@ class CameraFragment : Fragment() {
     private var viewModelArray = List<PictureModel?>(8) { null } as ArrayList<PictureModel?>
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
+    private val position: Int by lazy { arguments?.getInt("index") ?: 0 }
+    private val previousFragment: String by lazy { arguments?.getString("previous_fragment") ?: "" }
+    private var prePictureArray: ArrayList<PictureModel?>? = null
 
     private val pictureViewModel: PictureViewModel by activityViewModels()
 
@@ -87,9 +91,10 @@ class CameraFragment : Fragment() {
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
 
         @JvmStatic
-        fun newInstance(index: Int): CameraFragment {
+        fun newInstance(index: Int, previousFragment: String): CameraFragment {
             val args = Bundle()
             args.putInt("index", index)
+            args.putString("previous_fragment", previousFragment)
             val fragment = CameraFragment()
             fragment.arguments = args
             return fragment
@@ -108,16 +113,14 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewFinder = previewView
+        viewFinder = previewView
 
-        }
 
         permissionCheck =
             PermissionCheck(this@CameraFragment, object : PermissionCheck.PermissionListener {
@@ -126,11 +129,17 @@ class CameraFragment : Fragment() {
                 }
             })
 
-        val prePictureArray = pictureViewModel.getPictureArray()
+
+        prePictureArray = pictureViewModel.getPictureArray()
         pictureViewModel.getAllPictureData().observe(viewLifecycleOwner) {
             if (it != prePictureArray) {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, PictureFragment()).commit()
+                if (previousFragment == "club") {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment, PictureFragment()).commit()
+                } else if (previousFragment == "album") {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment, AlbumFragment()).commit()
+                }
             }
         }
 
@@ -217,19 +226,17 @@ class CameraFragment : Fragment() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
                     Log.d(TAG, "Photo succeeded: $savedUri")
+
                     val pictureList: ArrayList<PictureModel?> = arrayListOf()
                     lifecycleScope.launch {
-                        viewModelArray[0] = PictureModel(
+                        prePictureArray!![position] = PictureModel(
                             savedUri.toString(),
-                            SimpleDateFormat(
-                                DATE_FORMAT,
-                                Locale.KOREA
-                            ).format(System.currentTimeMillis()),
-                            0,
+                            SimpleDateFormat(DATE_FORMAT, Locale.KOREA).format(System.currentTimeMillis()),
+                            position,
                             photoFile,
                             false
                         )
-                        viewModelArray.forEach {
+                        prePictureArray!!.forEach {
                             pictureList.add(it)
                         }
                         pictureViewModel.setTakePhoto(pictureList)

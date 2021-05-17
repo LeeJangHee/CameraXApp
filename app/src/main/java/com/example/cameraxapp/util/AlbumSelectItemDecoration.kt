@@ -13,7 +13,7 @@ class AlbumSelectItemDecoration(private val context: Context) : RecyclerView.Ite
 //    var buttonViewList = ArrayList<Boolean>()
 
     init {
-        for (i in 0 until 8) {
+        for (i in 0 until 16) {
             buttonViewList.add(false)
         }
     }

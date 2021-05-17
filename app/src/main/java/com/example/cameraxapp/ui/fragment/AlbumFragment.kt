@@ -24,7 +24,7 @@ class AlbumFragment : Fragment() {
     var _binding: FragmentAlbumBinding? = null
     val binding get() = _binding!!
     private val pictureViewModel: PictureViewModel by activityViewModels()
-    private val albumAdapter by lazy { AlbumAdapter() }
+    private val albumAdapter by lazy { AlbumAdapter(requireActivity()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,21 +40,9 @@ class AlbumFragment : Fragment() {
         val customDecoration = AlbumSelectItemDecoration(requireContext())
         binding.apply {
             viewModel = pictureViewModel
-            lifecycleOwner = viewLifecycleOwner
+            lifecycleOwner = this@AlbumFragment
             albumRecyclerView.adapter = albumAdapter
             albumRecyclerView.layoutManager = GridLayoutManager(requireContext(), 4)
-//            albumRecyclerView.addItemDecoration(object: RecyclerView.ItemDecoration() {
-//                override fun getItemOffsets(
-//                    outRect: Rect,
-//                    view: View,
-//                    parent: RecyclerView,
-//                    state: RecyclerView.State
-//                ) {
-//                    super.getItemOffsets(outRect, view, parent, state)
-//                    val position = parent.getChildAdapterPosition(view)
-//                    outRect.top = -100
-//                }
-//            })
             albumRecyclerView.addItemDecoration(customDecoration)
         }
 

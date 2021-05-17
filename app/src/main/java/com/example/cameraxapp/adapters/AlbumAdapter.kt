@@ -2,14 +2,21 @@ package com.example.cameraxapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.ItemAlbumBinding
 import com.example.cameraxapp.model.PictureModel
+import com.example.cameraxapp.ui.fragment.AlbumFragment
+import com.example.cameraxapp.ui.fragment.CameraFragment
 import com.example.cameraxapp.util.Constants.Companion.buttonViewList
+import kotlinx.android.synthetic.main.item_album.view.*
 
 const val TAG = "janghee"
 
-class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
+class AlbumAdapter(
+    private val requireActivity: FragmentActivity
+) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     private var pictureList = List<PictureModel?>(8) { null } as ArrayList<PictureModel?>
 //    private var buttonViewList = ArrayList<Boolean>()
@@ -50,7 +57,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
         holder.binding.bool = buttonViewList[position]
 
         // 리사이클러 아이템 클릭
-        holder.itemView.setOnClickListener {
+        holder.itemView.setOnLongClickListener {
             val preIndex = selectItemIndex
             selectItemIndex = position
 
@@ -70,6 +77,21 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                     notifyItemChanged(position)
                 }
             }
+            true
+        }
+
+        holder.binding.albumCamera.setOnClickListener {
+            // 카메라 클릭
+            requireActivity.supportFragmentManager.beginTransaction().replace(R.id.fragment, CameraFragment.newInstance(position, "album")).commit()
+        }
+        holder.binding.albumDelete.setOnClickListener {
+            // 사진 삭제 = list[position] = null
+        }
+        holder.binding.albumCancel.setOnClickListener {
+            // 취소 = View.GONE
+            buttonViewList[position] = !buttonViewList[position]
+            selectItemIndex = -1
+            notifyItemChanged(position)
         }
         pictureList[position]?.let { holder.bind(it, buttonViewList[position]) }
     }
