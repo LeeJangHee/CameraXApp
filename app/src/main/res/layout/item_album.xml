@@ -58,36 +58,51 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/album_edge">
+            android:layout_width="260dp"
+            android:layout_height="168dp"
+            android:background="@drawable/album_edge"
+            android:backgroundTint="@color/black">
 
             <ImageView
                 android:id="@+id/album_imageView"
                 imageFromUrl="@{result.imageUrl}"
+                android:visibility="invisible"
                 android:layout_width="260dp"
                 android:layout_height="168dp"
                 android:padding="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
+            <ImageView
+                android:id="@+id/album_no_imageView"
+                imageFromUrl="@{result.imageUrl}"
+                android:visibility="visible"
+                android:layout_width="62dp"
+                android:layout_height="59dp"
+                android:src="@drawable/w_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/album_date_textView"
+                imageFromUrl="@{result.imageUrl}"
                 android:layout_width="110dp"
                 android:layout_height="22dp"
-                android:layout_marginEnd="2dp"
                 android:layout_marginBottom="11dp"
                 android:background="#B3000000"
                 android:gravity="center"
                 android:text="yyyy.MM.dd hh:mm"
                 android:textColor="@color/white"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/album_imageView"
-                app:layout_constraintEnd_toEndOf="@+id/album_imageView" />
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
