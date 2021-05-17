@@ -3,6 +3,7 @@ package com.example.cameraxapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.ItemAlbumBinding
@@ -82,7 +83,13 @@ class AlbumAdapter(
 
         holder.binding.albumCamera.setOnClickListener {
             // 카메라 클릭
-            requireActivity.supportFragmentManager.beginTransaction().replace(R.id.fragment, CameraFragment.newInstance(position, ALBUM_FRAGMENT)).commit()
+            val fm = requireActivity.supportFragmentManager
+            val transaction = fm.beginTransaction()
+            transaction.replace(R.id.fragment, CameraFragment.newInstance(position, ALBUM_FRAGMENT))
+            transaction.addToBackStack(ALBUM_FRAGMENT)
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            transaction.commit()
+            transaction.isAddToBackStackAllowed
         }
         holder.binding.albumDelete.setOnClickListener {
             // 사진 삭제 = list[position] = null

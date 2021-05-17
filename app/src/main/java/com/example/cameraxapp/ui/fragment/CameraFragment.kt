@@ -23,6 +23,8 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -31,8 +33,10 @@ import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.FragmentCameraBinding
 import com.example.cameraxapp.model.PictureModel
 import com.example.cameraxapp.util.Constants
+import com.example.cameraxapp.util.Constants.Companion.ALBUM_FRAGMENT
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_FAST_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_SLOW_MILLIS
+import com.example.cameraxapp.util.Constants.Companion.CLUB_FRAGMENT
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.PermissionCheck
 import com.example.cameraxapp.viewmodel.PictureViewModel
@@ -49,7 +53,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class CameraFragment : Fragment() {
-    private var cameraCheck = false
+
     private var imageCapture: ImageCapture? = null
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var displayId: Int = -1
@@ -125,7 +129,7 @@ class CameraFragment : Fragment() {
         permissionCheck =
             PermissionCheck(this@CameraFragment, object : PermissionCheck.PermissionListener {
                 override fun permissionAllowed() {
-                    cameraCheck = true
+                    startCamera()
                 }
             })
 
@@ -133,13 +137,25 @@ class CameraFragment : Fragment() {
         prePictureArray = pictureViewModel.getPictureArray()
         pictureViewModel.getAllPictureData().observe(viewLifecycleOwner) {
             if (it != prePictureArray) {
-                if (previousFragment == "club") {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment, PictureFragment()).commit()
-                } else if (previousFragment == "album") {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment, AlbumFragment()).commit()
-                }
+                requireActivity().onBackPressed()
+//                val fm = requireActivity().supportFragmentManager
+//                val transaction = fm.beginTransaction()
+//                when (previousFragment) {
+//                    CLUB_FRAGMENT -> {
+//                        fm.popBackStack(CLUB_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                        transaction.replace(R.id.fragment, PictureFragment(), CLUB_FRAGMENT)
+//
+//                    }
+//                    ALBUM_FRAGMENT -> {
+//                        fm.popBackStack(ALBUM_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                        transaction.replace(R.id.fragment, AlbumFragment(), ALBUM_FRAGMENT)
+//                        requireActivity().supportFragmentManager.beginTransaction()
+//                            .replace(R.id.fragment, AlbumFragment()).commit()
+//                    }
+//                }
+//                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                transaction.commit()
+//                transaction.isAddToBackStackAllowed
             }
         }
 
@@ -152,11 +168,6 @@ class CameraFragment : Fragment() {
         viewFinder.post {
             displayId = viewFinder.display.displayId
             permissionCheck.hasPermissions(arrayListOf(Constants.PERMISSION_CAMERA))
-
-            if (cameraCheck) {
-                startCamera()
-            }
-
         }
 
 
@@ -188,6 +199,7 @@ class CameraFragment : Fragment() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
+
 
     private fun takePhoto() {
         // 캡쳐 이미지가 null 이면 함수 종료

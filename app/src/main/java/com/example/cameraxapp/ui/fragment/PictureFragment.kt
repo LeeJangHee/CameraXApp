@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.FragmentPictureBinding
@@ -73,8 +74,13 @@ class PictureFragment : Fragment() {
     }
 
     private fun openCameraFragment() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment, CameraFragment.newInstance(0, CLUB_FRAGMENT)).commit()
+        val fm = requireActivity().supportFragmentManager
+        val transaction = fm.beginTransaction()
+        transaction.replace(R.id.fragment, CameraFragment.newInstance(0, CLUB_FRAGMENT))
+        transaction.addToBackStack(CLUB_FRAGMENT)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.commit()
+        transaction.isAddToBackStackAllowed
     }
 
 
