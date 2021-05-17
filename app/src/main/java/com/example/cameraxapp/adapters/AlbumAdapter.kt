@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.ItemAlbumBinding
 import com.example.cameraxapp.model.PictureModel
-import com.example.cameraxapp.ui.fragment.AlbumFragment
 import com.example.cameraxapp.ui.fragment.CameraFragment
+import com.example.cameraxapp.util.Constants.Companion.ALBUM_FRAGMENT
 import com.example.cameraxapp.util.Constants.Companion.buttonViewList
 import kotlinx.android.synthetic.main.item_album.view.*
 
@@ -82,10 +82,11 @@ class AlbumAdapter(
 
         holder.binding.albumCamera.setOnClickListener {
             // 카메라 클릭
-            requireActivity.supportFragmentManager.beginTransaction().replace(R.id.fragment, CameraFragment.newInstance(position, "album")).commit()
+            requireActivity.supportFragmentManager.beginTransaction().replace(R.id.fragment, CameraFragment.newInstance(position, ALBUM_FRAGMENT)).commit()
         }
         holder.binding.albumDelete.setOnClickListener {
             // 사진 삭제 = list[position] = null
+
         }
         holder.binding.albumCancel.setOnClickListener {
             // 취소 = View.GONE

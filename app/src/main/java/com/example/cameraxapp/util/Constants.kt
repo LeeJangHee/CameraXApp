@@ -32,5 +32,9 @@ class Constants {
 
         var buttonViewList = ArrayList<Boolean>()
 
+        // fragment
+        const val ALBUM_FRAGMENT = "album"
+        const val CLUB_FRAGMENT = "club"
+
     }
 }

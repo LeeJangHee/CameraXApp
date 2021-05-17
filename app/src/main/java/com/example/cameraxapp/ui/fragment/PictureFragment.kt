@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.cameraxapp.R
 import com.example.cameraxapp.databinding.FragmentPictureBinding
 import com.example.cameraxapp.ui.activity.MainActivity
+import com.example.cameraxapp.util.Constants.Companion.CLUB_FRAGMENT
 import com.example.cameraxapp.util.Constants.Companion.TAG
 import com.example.cameraxapp.util.ProgressDialog
 import com.example.cameraxapp.util.ProgressbarDialog
@@ -41,7 +42,7 @@ class PictureFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentPictureBinding.inflate(inflater, container, false)
         binding.apply {
-            lifecycleOwner = viewLifecycleOwner
+            lifecycleOwner = this@PictureFragment
             viewModel = pictureViewModel
             index = 0
         }
@@ -73,7 +74,7 @@ class PictureFragment : Fragment() {
 
     private fun openCameraFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment, CameraFragment.newInstance(0, "club")).commit()
+            .replace(R.id.fragment, CameraFragment.newInstance(0, CLUB_FRAGMENT)).commit()
     }
 
 

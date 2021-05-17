@@ -69,7 +69,7 @@ class CameraFragment : Fragment() {
     private lateinit var viewFinder: PreviewView
     private lateinit var context: Activity
 
-    private val displayManager by lazy {
+    private val displayManager: DisplayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     }
 
