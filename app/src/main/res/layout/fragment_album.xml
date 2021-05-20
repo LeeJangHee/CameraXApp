@@ -28,28 +28,17 @@
 
 
 
-            <TextView
-                android:id="@+id/notice_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="19.3dp"
-                android:layout_marginStart="90dp"
-                android:layout_marginTop="25dp"
-                android:text="TextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-            <ImageView
-                android:id="@+id/notice_imageView"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txt_club_option_hint"
+                android:layout_width="match_parent"
+                android:layout_height="73.3dp"
                 android:layout_marginStart="50.7dp"
-                android:layout_marginTop="17.3dp"
-                android:layout_marginEnd="6dp"
-                app:layout_constraintBottom_toBottomOf="@+id/notice_textView"
-                app:layout_constraintEnd_toStartOf="@+id/notice_textView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/notice_textView"
-                app:srcCompat="@drawable/bell" />
+                android:text="고객이 보유한 클럽의 헤드커버 유무, 브랜드를 확인해 주세요"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/bell"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical"
+                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/album_recyclerView"

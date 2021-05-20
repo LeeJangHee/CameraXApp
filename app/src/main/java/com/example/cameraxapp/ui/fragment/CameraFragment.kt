@@ -38,8 +38,11 @@ import com.example.cameraxapp.util.Constants.Companion.ANIMATION_FAST_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.ANIMATION_SLOW_MILLIS
 import com.example.cameraxapp.util.Constants.Companion.CLUB_FRAGMENT
 import com.example.cameraxapp.util.Constants.Companion.TAG
+import com.example.cameraxapp.util.Constants.Companion.buttonViewList
 import com.example.cameraxapp.util.PermissionCheck
 import com.example.cameraxapp.viewmodel.PictureViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.coroutines.*
 import java.io.File
@@ -57,11 +60,9 @@ class CameraFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var displayId: Int = -1
-    private var viewModelArray = List<PictureModel?>(8) { null } as ArrayList<PictureModel?>
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
     private val position: Int by lazy { arguments?.getInt("index") ?: 0 }
-    private val previousFragment: String by lazy { arguments?.getString("previous_fragment") ?: "" }
     private var prePictureArray: ArrayList<PictureModel?>? = null
 
     private val pictureViewModel: PictureViewModel by activityViewModels()
@@ -89,16 +90,15 @@ class CameraFragment : Fragment() {
     }
 
     companion object {
-        private const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
+        private const val DATE_FORMAT = "yyyy.MM.dd hh:mm"
         private const val FILENAME_FORMAT = "roundId_index"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
 
         @JvmStatic
-        fun newInstance(index: Int, previousFragment: String): CameraFragment {
+        fun newInstance(index: Int): CameraFragment {
             val args = Bundle()
             args.putInt("index", index)
-            args.putString("previous_fragment", previousFragment)
             val fragment = CameraFragment()
             fragment.arguments = args
             return fragment
@@ -136,7 +136,7 @@ class CameraFragment : Fragment() {
 
         prePictureArray = pictureViewModel.getPictureArray()
         pictureViewModel.getAllPictureData().observe(viewLifecycleOwner) {
-            if (it != prePictureArray) {
+            if (!(it === prePictureArray)) {
                 requireActivity().onBackPressed()
 //                val fm = requireActivity().supportFragmentManager
 //                val transaction = fm.beginTransaction()
@@ -241,9 +241,13 @@ class CameraFragment : Fragment() {
 
                     val pictureList: ArrayList<PictureModel?> = arrayListOf()
                     lifecycleScope.launch {
+                        buttonViewList[position] = false
                         prePictureArray!![position] = PictureModel(
                             savedUri.toString(),
-                            SimpleDateFormat(DATE_FORMAT, Locale.KOREA).format(System.currentTimeMillis()),
+                            SimpleDateFormat(
+                                DATE_FORMAT,
+                                Locale.KOREA
+                            ).format(System.currentTimeMillis()),
                             position,
                             photoFile,
                             false
@@ -255,7 +259,7 @@ class CameraFragment : Fragment() {
 
                     }
 
-                    val mimeType = MimeTypeMap.getSingleton()
+                    /*val mimeType = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(savedUri.toFile().extension)
 
                     MediaScannerConnection.scanFile(
@@ -264,7 +268,7 @@ class CameraFragment : Fragment() {
                         arrayOf(mimeType)
                     ) { path, uri ->
                         Log.d(TAG, "Image capture scanned into media store: $uri, $path")
-                    }
+                    }*/
 
                 }
             })

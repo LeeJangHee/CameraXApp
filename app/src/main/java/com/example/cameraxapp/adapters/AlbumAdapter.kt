@@ -1,5 +1,6 @@
 package com.example.cameraxapp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
@@ -11,12 +12,14 @@ import com.example.cameraxapp.model.PictureModel
 import com.example.cameraxapp.ui.fragment.CameraFragment
 import com.example.cameraxapp.util.Constants.Companion.ALBUM_FRAGMENT
 import com.example.cameraxapp.util.Constants.Companion.buttonViewList
+import com.example.cameraxapp.viewmodel.PictureViewModel
 import kotlinx.android.synthetic.main.item_album.view.*
 
 const val TAG = "janghee"
 
 class AlbumAdapter(
-    private val requireActivity: FragmentActivity
+    private val requireActivity: FragmentActivity,
+    private val pictureViewModel: PictureViewModel
 ) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     private var pictureList = List<PictureModel?>(8) { null } as ArrayList<PictureModel?>
@@ -32,7 +35,7 @@ class AlbumAdapter(
 
         }
 
-        fun bind(pictureModel: PictureModel, isBool: Boolean) {
+        fun bind(pictureModel: PictureModel) {
             with(binding) {
                 result = pictureModel
                 executePendingBindings()
@@ -64,44 +67,49 @@ class AlbumAdapter(
 
             if (preIndex == -1) {
                 buttonViewList[position] = !buttonViewList[position]
-                notifyItemChanged(position)
+//                notifyItemChanged(position)
             } else {
                 if (preIndex == position) {
                     buttonViewList[position] = !buttonViewList[position]
-                    notifyItemChanged(position)
+//                    notifyItemChanged(position)
                     selectItemIndex = -1
                 } else {
                     buttonViewList[position] = !buttonViewList[position]
                     buttonViewList[preIndex] = !buttonViewList[preIndex]
 
-                    notifyItemChanged(preIndex)
-                    notifyItemChanged(position)
+//                    notifyItemChanged(preIndex)
+//                    notifyItemChanged(position)
                 }
             }
+            notifyDataSetChanged()
             true
         }
 
         holder.binding.albumCamera.setOnClickListener {
             // 카메라 클릭
+            selectItemIndex = -1
             val fm = requireActivity.supportFragmentManager
             val transaction = fm.beginTransaction()
-            transaction.replace(R.id.fragment, CameraFragment.newInstance(position, ALBUM_FRAGMENT))
-            transaction.addToBackStack(ALBUM_FRAGMENT)
+            transaction.replace(R.id.fragment, CameraFragment.newInstance(position))
+            transaction.addToBackStack(null)
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             transaction.commit()
             transaction.isAddToBackStackAllowed
         }
         holder.binding.albumDelete.setOnClickListener {
+            val prePictureList = pictureViewModel.getPictureArray()
             // 사진 삭제 = list[position] = null
-
+            prePictureList?.set(position, null)
+            pictureViewModel.setPictureData(prePictureList!!)
         }
         holder.binding.albumCancel.setOnClickListener {
             // 취소 = View.GONE
-            buttonViewList[position] = !buttonViewList[position]
+            buttonViewList[position] = false
             selectItemIndex = -1
-            notifyItemChanged(position)
+//            notifyItemChanged(position)
+            notifyDataSetChanged()
         }
-        pictureList[position]?.let { holder.bind(it, buttonViewList[position]) }
+        pictureList[position]?.let { holder.bind(it) }
     }
 
     override fun getItemCount(): Int {

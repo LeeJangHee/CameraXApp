@@ -76,7 +76,7 @@ class PictureFragment : Fragment() {
     private fun openCameraFragment() {
         val fm = requireActivity().supportFragmentManager
         val transaction = fm.beginTransaction()
-        transaction.replace(R.id.fragment, CameraFragment.newInstance(0, CLUB_FRAGMENT))
+        transaction.replace(R.id.fragment, CameraFragment.newInstance(0))
         transaction.addToBackStack(CLUB_FRAGMENT)
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.commit()
