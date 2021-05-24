@@ -3,15 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="index"
-            type="Integer" />
-        <variable
-            name="viewModel"
-            type="com.example.cameraxapp.viewmodel.PictureViewModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/album_fragment"
         android:layout_width="match_parent"
@@ -19,6 +10,7 @@
         tools:context=".ui.fragment.AlbumFragment">
 
         <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/add_button"
@@ -27,18 +19,16 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
 
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txt_club_option_hint"
                 android:layout_width="match_parent"
                 android:layout_height="73.3dp"
-                android:layout_marginStart="50.7dp"
-                android:text="고객이 보유한 클럽의 헤드커버 유무, 브랜드를 확인해 주세요"
-                android:layout_centerVertical="true"
-                android:drawableLeft="@drawable/bell"
                 android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="50.7dp"
+                android:drawableLeft="@drawable/bell"
                 android:gravity="center_vertical"
-                />
+                android:text="고객이 보유한 클럽의 헤드커버 유무, 브랜드를 확인해 주세요" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/album_recyclerView"
@@ -89,96 +79,63 @@
             app:layout_constraintStart_toEndOf="@+id/back_button"
             app:layout_constraintTop_toTopOf="@+id/back_button" />
 
-        <ImageView
-            android:id="@+id/toolbar_check_imageView"
-            android:layout_width="48dp"
-            android:layout_height="41.3dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="26dp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/check_off" />
-
-        <TextView
-            android:id="@+id/toolbar_check_textView"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toolbar_check_button"
             android:layout_width="wrap_content"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableTop="@drawable/check_off"
+            android:gravity="center"
             android:text="확인"
             android:textColor="@color/color_003d41"
-            app:layout_constraintEnd_toEndOf="@+id/toolbar_check_imageView"
-            app:layout_constraintStart_toStartOf="@+id/toolbar_check_imageView"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_check_imageView" />
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/toolbar_sign_imageView"
-            android:layout_width="48dp"
-            android:layout_height="41dp"
-            android:layout_marginEnd="19dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar_check_imageView"
-            app:layout_constraintEnd_toStartOf="@+id/toolbar_check_imageView"
-            app:layout_constraintTop_toTopOf="@+id/toolbar_check_imageView"
-            app:srcCompat="@drawable/sign_ch_off" />
-
-        <TextView
-            android:id="@+id/toolbar_sign_textView"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toolbar_sign_button"
             android:layout_width="wrap_content"
-            android:layout_height="19dp"
-            android:layout_marginTop="2dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableTop="@drawable/sign_ch_off"
+            android:gravity="center"
             android:text="서명받기"
             android:textColor="@color/color_003d41"
-            app:layout_constraintEnd_toEndOf="@+id/toolbar_sign_imageView"
-            app:layout_constraintStart_toStartOf="@+id/toolbar_sign_imageView"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_sign_imageView" />
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintEnd_toStartOf="@+id/toolbar_check_button" />
 
-        <ImageView
-            android:id="@+id/toolbar_club_imageView"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toolbar_club_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="31dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar_sign_imageView"
-            app:layout_constraintEnd_toStartOf="@+id/toolbar_sign_imageView"
-            app:layout_constraintTop_toTopOf="@+id/toolbar_sign_imageView"
-            app:srcCompat="@drawable/club_ck_off" />
-
-        <TextView
-            android:id="@+id/toolbar_club_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableTop="@drawable/club_ck_off"
+            android:gravity="center"
             android:text="클럽체크"
             android:textColor="@color/color_003d41"
-            app:layout_constraintEnd_toEndOf="@+id/toolbar_club_imageView"
-            app:layout_constraintStart_toStartOf="@+id/toolbar_club_imageView"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_club_imageView" />
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintEnd_toStartOf="@+id/toolbar_sign_button" />
 
         <ImageView
             android:id="@+id/toolbar_divide_imageView"
             android:layout_width="20dp"
             android:layout_height="41dp"
             android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar_club_imageView"
-            app:layout_constraintEnd_toStartOf="@+id/toolbar_club_imageView"
-            app:layout_constraintTop_toTopOf="@+id/toolbar_club_imageView"
-            app:srcCompat="@drawable/off" />
+            android:src="@drawable/off"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar_club_button"
+            app:layout_constraintEnd_toStartOf="@+id/toolbar_club_button"
+            app:layout_constraintTop_toTopOf="@+id/toolbar_club_button" />
 
-        <ImageView
-            android:id="@+id/toolbar_option_imageView"
-            android:layout_width="48dp"
-            android:layout_height="41dp"
-            android:layout_marginEnd="7dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar_divide_imageView"
-            app:layout_constraintEnd_toStartOf="@+id/toolbar_divide_imageView"
-            app:layout_constraintTop_toTopOf="@+id/toolbar_divide_imageView"
-            app:srcCompat="@drawable/option_ch_off" />
-
-        <TextView
-            android:id="@+id/toolbar_option_textView"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toolbar_option_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableTop="@drawable/option_ch_off"
+            android:gravity="center"
             android:text="옵션체크"
             android:textColor="@color/color_003d41"
-            app:layout_constraintEnd_toEndOf="@+id/toolbar_option_imageView"
-            app:layout_constraintStart_toStartOf="@+id/toolbar_option_imageView"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_option_imageView" />
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintEnd_toStartOf="@+id/toolbar_divide_imageView" />
 
         <TextView
             android:id="@+id/textView6"

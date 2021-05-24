@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,7 @@ import com.example.cameraxapp.adapters.AlbumAdapter
 import com.example.cameraxapp.databinding.FragmentAlbumBinding
 import com.example.cameraxapp.util.AlbumSelectItemDecoration
 import com.example.cameraxapp.viewmodel.PictureViewModel
+import kotlinx.android.synthetic.main.fragment_album.*
 import kotlinx.coroutines.launch
 
 class AlbumFragment : Fragment() {
@@ -27,8 +29,6 @@ class AlbumFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAlbumBinding.inflate(inflater, container, false)
-        binding.viewModel = pictureViewModel
-        binding.lifecycleOwner = this
 
         setupRecyclerView()
 
@@ -38,6 +38,18 @@ class AlbumFragment : Fragment() {
                     albumAdapter.setData(it)
                 }
             }
+        }
+
+        binding.toolbarCheckButton.setOnClickListener {
+            Toast.makeText(requireActivity(), "툴바 확인", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.toolbarSignButton.setOnClickListener {
+            Toast.makeText(requireActivity(), "툴바 사인", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.toolbarOptionButton.setOnClickListener {
+            Toast.makeText(requireActivity(), "툴바 옵션", Toast.LENGTH_SHORT).show()
         }
 
         return binding.root

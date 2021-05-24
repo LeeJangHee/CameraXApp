@@ -101,6 +101,7 @@ class AlbumAdapter(
             // 사진 삭제 = list[position] = null
             prePictureList?.set(position, null)
             pictureViewModel.setPictureData(prePictureList!!)
+            notifyDataSetChanged()
         }
         holder.binding.albumCancel.setOnClickListener {
             // 취소 = View.GONE

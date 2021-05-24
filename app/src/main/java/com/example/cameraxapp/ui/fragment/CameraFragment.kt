@@ -249,8 +249,7 @@ class CameraFragment : Fragment() {
                                 Locale.KOREA
                             ).format(System.currentTimeMillis()),
                             position,
-                            photoFile,
-                            false
+                            photoFile
                         )
                         prePictureArray!!.forEach {
                             pictureList.add(it)
